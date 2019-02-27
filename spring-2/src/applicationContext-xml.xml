@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<bean id="atithmeticCalculator" 
+		class="com.atgs.apo.xml.AtithmeticCalculatorImpl"></bean>
+	
+	<bean id="logginAspect" 
+		class="com.atgs.apo.xml.LogginAspect"> </bean>
+	
+	<bean id="vlidationAspect" 
+		class="com.atgs.apo.xml.VlidationAspect"></bean>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(* com.atgs.apo.xml.AtithmeticCalculatorImpl.*(..))" 
+			id="pointcut"/>
+		<aop:aspect ref="logginAspect" order="2">
+			<aop:before method="beforeMethod" pointcut-ref="pointcut"/>
+			<aop:after  method="afterMethod"  pointcut-ref="pointcut"/>
+			<aop:after-throwing  method="afterThrowing" pointcut-ref="pointcut" throwing="e"/>
+			<aop:after-returning method="afterRunning"  pointcut-ref="pointcut" returning="result"/>
+		</aop:aspect>
+		<aop:aspect ref="vlidationAspect" order="1">
+			<aop:before method="validateArgs" pointcut-ref="pointcut"/>
+		</aop:aspect>
+	</aop:config>
+</beans>
